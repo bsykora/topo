@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+        .mapboxgl-map {font: 10px/10px 'Helvetica Neue', Arial, Helvetica, sans-serif; }
+        #localnav {position: fixed; top: 0; left: 0; width: 100%; height: 50px; z-index: 1; background-color:#1EAAD4; text-align:center;}
+        #topologo {position:fixed; top:0px; left:0px; z-index: 2}
+        h1 {margin:auto; line-height:51px; vertical-align:middle; padding: 15px 2px; font: 18px/18px 'Helvetica Neue', Arial, Helvetica, sans-serif; color:#ffffff;}
+        .mapboxgl-ctrl-top-right {top: 50px; right: 0;}
+    </style>
+</head>
+<body>
+
+<style>
+#map {
+    position: fixed;
+    width:50%;
+}
+#features {
+    width: 50%;
+    margin-left: 50%;
+    font-family: sans-serif;
+    overflow-y: scroll;
+    background-color: #fafafa;
+}
+section {
+    padding:  60px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 13px;
+}
+section.active {
+    opacity: 1;
+}
+section:last-child {
+    border-bottom: none;
+    margin-bottom: 200px;
+}
+</style>
+<div id='localnav'><h1>Yosemite</h1></div>
+<div id='map'></div>
+<div id='topologo'><img src="img/topo.png"/></div>
+<div id='features'>
+    <section id='yosemitevillage' class='active'>
+        <h3>Yosemite Valley</h3>
+        <p><strong>Valley Visitor Center</strong> (all year): Ranger-staffed information desk, bookstore, <em>Spirit of Yosemite</em> film, and exhibit hall detailing the park's geology, plant and animal life, and history.</p>
+        <p><strong>Valley Wilderness Center</strong> (May to October): Offers <a id="CP___PAGEID=187797,wildpermits.htm,550|" href="http://nps.gov/yose/planyourvisit/wildpermits.htm">wilderness permits</a>, bear canisters, maps, and guidebooks. Information on pre-trip planning, minimum-impact camping, and the <a id="CP___PAGEID=149796,yosemitewilderness.htm,550|" href="http://nps.gov/yose/planyourvisit/yosemitewilderness.htm">Yosemite Wilderness</a>.</p>
+        <p><img src="img/visitorcenter.jpg" width="60%"></p>
+    </section>
+    <section id='yosemitefalls'>
+        <h3>Yosemite Falls</h3>
+        <p><strong>Upper Yosemite Fall:</strong> The 1,430-foot (440&nbsp;m) plunge alone is among the twenty highest waterfalls in the world. Trails from the valley floor and down from other park areas outside the valley lead to both the top and base of Upper Yosemite Fall.</p>
+        <p><strong>Middle Cascades:</strong> Between the two obvious main plunges there are a series of five smaller plunges collectively referred to as the Middle Cascades. Taken together these account for a total drop of 675 feet (206&nbsp;m), more than twice the height of the Lower Fall.</p>
+        <p><strong>Lower Yosemite Fall:</strong> The final 320-foot (98&nbsp;m) drop adjacent to an accessible viewing area, provides the most-used viewing point for the waterfalls. Yosemite Creek emerges from the base of the Lower Fall and flows into the <a href="/wiki/Merced_River" title="Merced River">Merced River</a> nearby.</p>
+        <p><img src="img/yosemitefalls.jpg" width="60%"></p>
+    </section>
+    <section id='clouds-rest'>
+        <a id="2"></a>
+        <h3>Cloud's Rest</h3>
+        <p>The summit can be reached by a 7.2-mile (11.6&nbsp;km) trail hike from Tioga Pass Road</a> or a 9.4-mile (15.1&nbsp;km) trail hike from Happy Isles by way of Little Yosemite Valley. There are also several technical routes available.</p>
+        <p>Clouds Rest is an arête, a thin, almost knife-like, ridge of rock formed when glaciers eroded away solid rock to form Tenaya Canyon and Little Yosemite Valley. The northwest face, mostly solid granite, rises 5,000 feet (1,520 m) above Tenaya Creek.</p>
+        <a href="http://www.backpacker.com/trips/california/yosemite-national-park/yosemite-national-park-clouds-rest/">Backpacker Magazine Review</a>
+        <p><img src="img/cloudsrest.jpeg" width="60%"></p>
+    </section>
+    <section id='half-dome'>
+        <h3>Half Dome</h3>
+        <p></p>
+    </section>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYnN5a29yYSIsImEiOiJjaWozNjlzdGowMDN2dHBrbngzOXg4MzB4In0.1-YE6Q570z6QwUdj5wwF_A';
+
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/bsykora/cij3724ky001t8vm52anodwmc',
+    center: [-119.587, 37.749],
+    zoom: 17,
+    bearing: 27,
+    pitch: 50
+});
+
+var chapters = {
+    'yosemitevillage': {
+        bearing: 27,
+        center: [-119.587, 37.749],
+        zoom: 17
+    },
+    'yosemitefalls': {
+        duration: 6000,
+        center: [-119.5973, 37.753],
+        bearing: 20,
+        zoom: 16.5
+    },
+    'clouds-rest': {
+        bearing: 90,
+        center: [-119.4892, 37.7679],
+        zoom: 17,
+        speed: 0.6
+    },
+    'half-dome': {
+        bearing: 90,
+        center: [-119.5329, 37.7460],
+        zoom: 17,
+        duration: 2000
+    },
+    'gloucester': {
+        bearing: 45,
+        center: [37.8499, 51.49439521],
+        zoom: 15.3,
+        duration: 2000
+    },
+    'caulfield-gardens': {
+        bearing: 180,
+        center: [37.8499, 51.5033856],
+        zoom: 12.3,
+        duration: 2000
+    },
+    'telegraph': {
+        bearing: 90,
+        center: [37.8499, 51.51433123],
+        zoom: 17.3,
+        duration: 2000
+    },
+    'charing-cross': {
+        bearing: 90,
+        center: [37.8499, 51.50779757],
+        zoom: 12.3,
+        duration: 2000
+    }
+};
+
+// On every scroll event, check which element is on screen
+window.onscroll = function() {
+    var chapterNames = Object.keys(chapters);
+    for (var i = 0; i < chapterNames.length; i++) {
+        var chapterName = chapterNames[i];
+        if (isElementOnScreen(chapterName)) {
+            setActiveChapter(chapterName);
+            break;
+        }
+    }
+};
+
+var activeChapterName = 'baker';
+function setActiveChapter(chapterName) {
+    if (chapterName === activeChapterName) return;
+
+    map.flyTo(chapters[chapterName]);
+
+    document.getElementById(chapterName).setAttribute('class', 'active');
+    document.getElementById(activeChapterName).setAttribute('class', '');
+
+    activeChapterName = chapterName;
+}
+
+function isElementOnScreen(id) {
+    var element = document.getElementById(id);
+    var bounds = element.getBoundingClientRect();
+    return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+
+map.addControl(new mapboxgl.Navigation());
+
+</script>
+
+</body>
+</html>
